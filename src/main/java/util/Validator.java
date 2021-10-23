@@ -7,14 +7,15 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+@FunctionalInterface
 public interface Validator<T> {
 
 
     @Contract(pure = true)
     boolean validate(T o);
 
-
-    default <R> Validator<T> thenValidating(
+    @Contract(pure = true)
+    default <R> @NotNull Validator<T> thenValidating(
              Function<T, R> keyExtractor,
              Predicate<R> keyValidator
     ){
