@@ -1,38 +1,108 @@
 package util;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
-@FunctionalInterface
-public interface Validator<T> {
+
+public class Validator<T,R> {
+    private final Function<T,R> keyExtractor;
+    private IValidator<T> validator;
 
 
-    @Contract(pure = true)
-    boolean validate(T o);
-
-    @Contract(pure = true)
-    default <R> @NotNull Validator<T> thenValidating(
-             Function<T, R> keyExtractor,
-             Predicate<R> keyValidator
-    ){
-        return (o) -> this.validate(o) && validating(keyExtractor, keyValidator).validate(o);
+    protected Validator(Function<T,R> keyExtractor){
+        this.keyExtractor = keyExtractor;
+        this.validator = null;
     }
 
-    @Contract(pure = true)
-    static <T, R> @NotNull Validator<T> validating(
-            Function<T, R> keyExtractor,
-            Predicate<R> keyValidator
-    ){
+    protected Validator(Function<T,R> keyExtractor, IValidator<T> validator){
+        this.keyExtractor = keyExtractor;
+        this.validator = validator;
+    }
+
+    public static <T,R> Validator<T,R> withKey(Function<T,R> keyExtractor){
         Objects.requireNonNull(keyExtractor);
-        Objects.requireNonNull(keyValidator);
-        return (o) -> keyValidator.test(keyExtractor.apply(o));
+        return new Validator<>(keyExtractor);
     }
 
+    public Validator<T,R> thenVaildating(Predicate<R> keyValidator){
+        if(validator == null)
+            this.validator = IValidator.validating(keyExtractor,keyValidator);
+        else
+            this.validator = validator.thenValidating(keyExtractor,keyValidator);
+        return this;
+    }
 
+    public <U> Validator<T,U> key(Function<T,U> keyExtractor){
+        return new Validator<>(keyExtractor,this.validator);
+    }
+
+    public IntValidator<T> key(ToIntFunction<T> keyExtractor){
+        return new IntValidator<>(keyExtractor);
+    }
+
+    public IValidator<T> getValidator(){
+        return this.validator;
+    }
+
+    public boolean validate(T o){
+        return this.validator.validate(o);
+    }
+
+    public boolean validateAll(Collection<T> tCollection){
+        Objects.requireNonNull(tCollection);
+        return tCollection.stream().allMatch(this::validate);
+    }
+
+    public Collection<T> filterInvalid(Collection<T> tCollection){
+        Objects.requireNonNull(tCollection);
+        return tCollection.stream().filter(this::validate).collect(Collectors.toList());
+    }
+
+    public T validOr(T toValidate, T other){
+        return this.validator.validate(toValidate) ? toValidate : other;
+    }
+
+    public boolean validOrThrow(T toValidate){
+        if(validator.validate(toValidate)){
+            return true;
+        }
+        throw new InvalidValueExecption("Value is invalid: " + toValidate);
+    }
+
+    public <X extends Throwable> boolean validOrThrow(T toValidate, Supplier<? extends X> throwableSupplier) throws X {
+        if(validator.validate(toValidate)){
+            return true;
+        }
+        throw throwableSupplier.get();
+    }
+
+    public static class InvalidValueExecption extends RuntimeException{
+        public InvalidValueExecption(){
+            super();
+        }
+
+        public InvalidValueExecption(String message) {
+            super(message);
+        }
+
+        public InvalidValueExecption(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public InvalidValueExecption(Throwable cause) {
+            super(cause);
+        }
+
+        protected InvalidValueExecption(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+            super(message, cause, enableSuppression, writableStackTrace);
+        }
+    }
 
 
 }
