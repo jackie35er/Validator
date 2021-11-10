@@ -13,7 +13,7 @@ public class Validator<T,R> {
 
     protected Validator(Function<T,R> keyExtractor){
         this.keyExtractor = keyExtractor;
-        this.validator = null;
+        this.validator = (n) -> true;
     }
 
     protected Validator(Function<T,R> keyExtractor, IValidator<T> validator){
@@ -26,11 +26,28 @@ public class Validator<T,R> {
         return new Validator<>(keyExtractor);
     }
 
+    public static <T> IntValidator<T> withIntKey(ToIntFunction<T> keyExtractor){
+        Objects.requireNonNull(keyExtractor);
+        return new IntValidator<>(keyExtractor);
+    }
+
+    public static <T> DoubleValidator<T> withDoubleKey(ToDoubleFunction<T> keyExtractor){
+        Objects.requireNonNull(keyExtractor);
+        return new DoubleValidator<>(keyExtractor);
+    }
+
+    public static <T> LongValidator<T> withLongKey(ToLongFunction<T> keyExtractor){
+        Objects.requireNonNull(keyExtractor);
+        return new LongValidator<>(keyExtractor);
+    }
+
+    public static <T> StringValidator<T> withStringKey(ToStringFunction<T> keyExtractor){
+        Objects.requireNonNull(keyExtractor);
+        return new StringValidator<>(keyExtractor);
+    }
+
     public Validator<T,R> thenVaildating(Predicate<R> keyValidator){
-        if(validator == null)
-            this.validator = IValidator.validating(keyExtractor,keyValidator);
-        else
-            this.validator = validator.thenValidating(keyExtractor,keyValidator);
+        this.validator = validator.thenValidating(keyExtractor,keyValidator);
         return this;
     }
 
@@ -50,8 +67,8 @@ public class Validator<T,R> {
         return new LongValidator<>(keyExtractor);
     }
 
-    public IValidator<T> getValidator(){
-        return this.validator;
+    public StringValidator<T> stringKey(ToStringFunction<T> keyExtractor){
+        return new StringValidator<>(keyExtractor);
     }
 
     public boolean validate(T o){
