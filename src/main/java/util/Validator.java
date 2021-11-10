@@ -72,9 +72,9 @@ public class Validator<T,R> {
         return this.validator.validate(toValidate) ? toValidate : other;
     }
 
-    public boolean validOrThrow(T toValidate){
+    public T validOrThrow(T toValidate){
         if(validator.validate(toValidate)){
-            return true;
+            return toValidate;
         }
         throw new InvalidValueExecption("Value is invalid: " + toValidate);
     }
