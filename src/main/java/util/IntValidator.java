@@ -27,23 +27,36 @@ public class IntValidator<T> extends Validator<T,Integer> {
         return this;
     }
 
-    public IntValidator<T> bigger(int value){
+    public IntValidator<T> greaterThan(double value){
         super.thenVaildating(n -> n > value);
         return this;
     }
 
-    public IntValidator<T> smaller(int value){
+    public IntValidator<T> lessThan(double value){
         super.thenVaildating(n -> n < value);
         return this;
     }
 
+    public IntValidator<T> equal(double value){
+        super.thenVaildating(n -> n == value);
+        return this;
+    }
 
-    public IntValidator<T> positiv(){
-        return this.bigger(0);
+    public IntValidator<T> greaterOrEqual(double value){
+        super.thenVaildating(n -> n >= value);
+        return this;
+    }
+
+    public IntValidator<T> lessOrEqual(double value) {
+        super.thenVaildating(n -> n <= value);
+        return this;
+    }
+
+        public IntValidator<T> positiv(){
+        return this.greaterThan(0);
     }
 
     public IntValidator<T> negativ(){
-        return this.smaller(0);
+        return this.lessThan(0);
     }
-
 }

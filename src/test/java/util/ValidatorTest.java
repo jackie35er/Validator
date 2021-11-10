@@ -1,38 +1,45 @@
 package util;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ValidatorTest {
-    @Test
-    public void basicValidator() {
-        Person valid = new Person("joe", 20);
-        Person invalid = new Person("pete", 30);
-        IValidator<Person> validator = IValidator.validating(Person::name, (a) -> a.startsWith("j"));
-        assertTrue(validator.validate(valid));
-        assertFalse(validator.validate(invalid));
+class ValidatorTest {
+    Animal animal1;
+    Animal animal2;
+    Animal animal3;
+
+
+
+    @BeforeEach
+    public void setup(){
+        animal1 = new Animal("John",4,"Rabbit","New York");
+        animal2 = new Animal("Shayne",2,"Parrot","New York");
+        animal3 = new Animal("Lilly",5,"Rabbit","Vienna");
     }
 
     @Test
-    public void thenValidating() {
-        Person valid = new Person("joe", 20);
-        Person invalid1 = new Person("james",43);
-        Person invalid2 = new Person("pete", 30);
-        Person invalid3 = new Person("adma",17);
+    public void basicTest(){
+        Validator<Animal,?> viennaRabbitValidator = Validator.withKey(Animal::age)
+                .thenVaildating(n -> n > 3)
+                .thenVaildating(n -> String.valueOf(n).length() == 1)
+                .key(Animal::type)
+                .thenVaildating(n -> n.equals("Rabbit"))
+                .key(Animal::zoo)
+                .thenVaildating(n -> n.equals("Vienna"));
 
-        IValidator<Person> validator = IValidator.validating(Person::name, (a) -> a.startsWith("j"))
-                .thenValidating(Person::age, (a) -> a <= 20);
-        assertTrue(validator.validate(valid));
-        assertFalse(validator.validate(invalid1));
-        assertFalse(validator.validate(invalid2));
-        assertFalse(validator.validate(invalid3));
+        assertTrue(viennaRabbitValidator.validate(animal3));
+        assertFalse(viennaRabbitValidator.validate(animal1));
+        assertFalse(viennaRabbitValidator.validate(animal2));
     }
 
 
 
-    public static record Person(String name, int age) {
+
+    public static record Animal(String name,int age,String type,String zoo){
 
     }
 }
+

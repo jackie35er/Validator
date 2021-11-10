@@ -1,6 +1,5 @@
 package util;
 
-import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 
 public class LongValidator<T> extends Validator<T,Long> {
@@ -28,23 +27,36 @@ public class LongValidator<T> extends Validator<T,Long> {
         return this;
     }
 
-    public LongValidator<T> bigger(int value){
+    public LongValidator<T> greaterThan(double value){
         super.thenVaildating(n -> n > value);
         return this;
     }
 
-    public LongValidator<T> smaller(int value){
+    public LongValidator<T> lessThan(double value){
         super.thenVaildating(n -> n < value);
         return this;
     }
 
+    public LongValidator<T> equal(double value){
+        super.thenVaildating(n -> n == value);
+        return this;
+    }
+
+    public LongValidator<T> greaterOrEqual(double value){
+        super.thenVaildating(n -> n >= value);
+        return this;
+    }
+
+    public LongValidator<T> lessOrEqual(double value) {
+        super.thenVaildating(n -> n <= value);
+        return this;
+    }
 
     public LongValidator<T> positiv(){
-        return this.bigger(0);
+        return this.greaterThan(0);
     }
 
     public LongValidator<T> negativ(){
-        return this.smaller(0);
+        return this.lessThan(0);
     }
-
 }

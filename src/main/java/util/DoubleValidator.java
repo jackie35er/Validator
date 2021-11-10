@@ -27,23 +27,37 @@ public class DoubleValidator<T> extends Validator<T,Double> {
         return this;
     }
 
-    public DoubleValidator<T> bigger(double value){
+    public DoubleValidator<T> greaterThan(double value){
         super.thenVaildating(n -> n > value);
         return this;
     }
 
-    public DoubleValidator<T> smaller(double value){
+    public DoubleValidator<T> lessThan(double value){
         super.thenVaildating(n -> n < value);
         return this;
     }
 
+    public DoubleValidator<T> equal(double value){
+        super.thenVaildating(n -> n == value);
+        return this;
+    }
+
+    public DoubleValidator<T> greaterOrEqual(double value){
+        super.thenVaildating(n -> n >= value);
+        return this;
+    }
+
+    public DoubleValidator<T> lessOrEqual(double value){
+        super.thenVaildating(n -> n <= value);
+        return this;
+    }
 
     public DoubleValidator<T> positiv(){
-        return this.bigger(0);
+        return this.greaterThan(0);
     }
 
     public DoubleValidator<T> negativ(){
-        return this.smaller(0);
+        return this.lessThan(0);
     }
 
 }

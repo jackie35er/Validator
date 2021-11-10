@@ -3,17 +3,13 @@ package util;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.function.ToIntFunction;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 
 public class Validator<T,R> {
     private final Function<T,R> keyExtractor;
     private IValidator<T> validator;
-
 
     protected Validator(Function<T,R> keyExtractor){
         this.keyExtractor = keyExtractor;
@@ -42,8 +38,16 @@ public class Validator<T,R> {
         return new Validator<>(keyExtractor,this.validator);
     }
 
-    public IntValidator<T> key(ToIntFunction<T> keyExtractor){
+    public IntValidator<T> intKey(ToIntFunction<T> keyExtractor){
         return new IntValidator<>(keyExtractor);
+    }
+
+    public DoubleValidator<T> doubleKey(ToDoubleFunction<T> keyExtractor){
+        return new DoubleValidator<>(keyExtractor);
+    }
+
+    public LongValidator<T> longKey(ToLongFunction<T> keyExtractor){
+        return new LongValidator<>(keyExtractor);
     }
 
     public IValidator<T> getValidator(){
