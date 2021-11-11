@@ -56,19 +56,19 @@ public class Validator<T,R> {
     }
 
     public IntValidator<T> intKey(ToIntFunction<T> keyExtractor){
-        return new IntValidator<>(keyExtractor);
+        return new IntValidator<>(keyExtractor,this.validator);
     }
 
     public DoubleValidator<T> doubleKey(ToDoubleFunction<T> keyExtractor){
-        return new DoubleValidator<>(keyExtractor);
+        return new DoubleValidator<>(keyExtractor,this.validator);
     }
 
     public LongValidator<T> longKey(ToLongFunction<T> keyExtractor){
-        return new LongValidator<>(keyExtractor);
+        return new LongValidator<>(keyExtractor,this.validator);
     }
 
     public StringValidator<T> stringKey(ToStringFunction<T> keyExtractor){
-        return new StringValidator<>(keyExtractor);
+        return new StringValidator<>(keyExtractor,this.validator);
     }
 
     public boolean validate(T o){
