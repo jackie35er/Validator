@@ -96,9 +96,9 @@ public class Validator<T,R> {
         throw new InvalidValueExecption("Value is invalid: " + toValidate);
     }
 
-    public <X extends Throwable> boolean validOrThrow(T toValidate, Supplier<? extends X> throwableSupplier) throws X {
+    public <X extends Throwable> T validOrThrow(T toValidate, Supplier<? extends X> throwableSupplier) throws X {
         if(validator.validate(toValidate)){
-            return true;
+            return toValidate;
         }
         throw throwableSupplier.get();
     }
