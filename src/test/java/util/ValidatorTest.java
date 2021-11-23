@@ -2,6 +2,8 @@ package util;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import util.validator.implementaions.DefaultValidator;
+import util.validator.interfaces.Validator;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,13 +24,13 @@ class ValidatorTest {
 
     @Test
     public void basicTest(){
-        Validator<Animal,?> viennaRabbitValidator = Validator.withKey(Animal::age)
-                .thenVaildating(n -> n > 3)
-                .thenVaildating(n -> String.valueOf(n).length() == 1)
+        Validator<Animal,?> viennaRabbitValidator = new DefaultValidator<>(Animal::age)
+                .validating(n -> n > 3)
+                .validating(n -> String.valueOf(n).length() == 1)
                 .key(Animal::type)
-                .thenVaildating(n -> n.equals("Rabbit"))
+                .validating(n -> n.equals("Rabbit"))
                 .key(Animal::zoo)
-                .thenVaildating(n -> n.equals("Vienna"));
+                .validating(n -> n.equals("Vienna"));
 
         assertTrue(viennaRabbitValidator.validate(animal3));
         assertFalse(viennaRabbitValidator.validate(animal1));
@@ -42,4 +44,3 @@ class ValidatorTest {
 
     }
 }
-
