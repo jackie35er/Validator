@@ -30,9 +30,9 @@ public class DefaultValidator<T,R> implements Validator<T,R> {
             inverseNextStatement = false;
             return validating((o) -> !isValid.test(o));
         }
-
-        this.isValid = (o) -> this.validate(o) && isValid.test(keyExtractor.apply(o));
-        return this;
+        DefaultValidator<T,R> newValidator = new DefaultValidator<>(keyExtractor);
+        newValidator.isValid = (o) -> this.validate(o) && isValid.test(keyExtractor.apply(o));
+        return newValidator;
     }
 
     @Override
