@@ -1,12 +1,13 @@
 package util.validator.interfaces;
 
 
-import util.validator.implementaions.DefaultValidator;
+import util.validator.implementaions.ValidatorImpl;
+import util.validator.interfaces.numberValidator.DoubleValidator;
+import util.validator.interfaces.numberValidator.IntValidator;
+import util.validator.interfaces.numberValidator.LongValidator;
 
 import java.util.Collection;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public interface Validator<T,R> {
 
@@ -18,7 +19,7 @@ public interface Validator<T,R> {
      * @return a default instance of Validator
      */
     static <T,R> Validator<T,R> getInstance(Function<T,R> keyExtractor){
-        return new DefaultValidator<>(keyExtractor);
+        return new ValidatorImpl<>(keyExtractor);
     }
 
     /**
@@ -29,10 +30,10 @@ public interface Validator<T,R> {
     Validator<T,R> validating(Predicate<R> isValid);
 
     /**
-     * inverses the next condition set with validating <br>
-     * {@code not().validating((o) -> false)} would be the same as {@code validating((o) -> true)}
+     * inverses the next condition set with validating <br> <br>
+     * {@code not().validating((o) -> false)} would be the same as    {@code validating((o) -> true)}<br> <br>
      * @see util.validator.interfaces.Validator#validating(Predicate)
-     * @return a Validator where the next Condition gets inversed
+     * @return a Validator where the next condition gets inverted
      */
     Validator<T,R> not();
 
@@ -43,7 +44,8 @@ public interface Validator<T,R> {
      */
     boolean validate(T t);
 
-    /**After building the Validator this method returns, if the given objects, in the collection, match the given conditions
+    /**
+     * After building the Validator this method returns, if the given objects, in the collection, match the given conditions
      * @see util.validator.interfaces.Validator#validate(Object)
      * @param tCollection a collection of T
      * @return true if all Objects match
@@ -77,10 +79,32 @@ public interface Validator<T,R> {
     <X extends Throwable> T validOrThrow(T t, Supplier<? extends X> throwableSupplier) throws X;
 
     /**
-     * returns a new Validator object, with a new key, but still kepping the old conditions
+     * returns a new Validator object, with a new key, but still keeping the old conditions
      * @param keyExtractor the key extractor to get the key
      * @param <U> the new key Type
      * @return a Validator instance with the new key
      */
     <U> Validator<T,U> key(Function<T,U> keyExtractor);
+    /**
+     * returns a new IntValidator object, with a new key, but still keeping the old conditions
+     * @param keyExtractor the key extractor to get the key
+     * @return a Validator instance with the new key
+     */
+    IntValidator<T> intKey(ToIntFunction<T> keyExtractor);
+
+    /**
+     * returns a new LongValidator object, with a new key, but still keeping the old conditions
+     * @param keyExtractor the key extractor to get the key
+     * @return a Validator instance with the new key
+     */
+    LongValidator<T> longKey(ToLongFunction<T> keyExtractor);
+
+    /**
+     * returns a new DoubleValidator object, with a new key, but still keeping the old conditions
+     *
+     * @param keyExtractor the key extractor to get the key
+     * @return a Validator instance with the new key
+     */
+    DoubleValidator<T> doubleKey(ToDoubleFunction<T> keyExtractor);
+
 }

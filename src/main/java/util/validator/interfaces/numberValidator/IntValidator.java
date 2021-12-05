@@ -1,10 +1,22 @@
 package util.validator.interfaces.numberValidator;
 
-import util.validator.interfaces.Validator;
+import util.validator.implementaions.IntValidatorImpl;
 
 import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 
-public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
+public interface IntValidator<T> extends NumberValidator<T, Integer> {
+
+    /**
+     * Returns a default instance of IntValidator
+     *
+     * @param keyExtractor the keyExtractor to get the key
+     * @param <T>          The type of object passed to the extractor
+     * @return a default instance of IntValidator
+     */
+    static <T> IntValidator<T> getInstance(ToIntFunction<T> keyExtractor) {
+        return new IntValidatorImpl<>(keyExtractor);
+    }
 
     /**
      * adds a condition to the validator
@@ -13,17 +25,17 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      * @return a FunctionalValidator object with the added condition
      */
     @Override
-    NumberValidator<T, R> validating(Predicate<R> isValid);
+    IntValidator<T> validating(Predicate<Integer> isValid);
 
     /**
      * inverses the next condition set with validating <br>
      * {@code not().validating((o) -> false)} would be the same as {@code validating((o) -> true)}
      *
      * @return a FunctionalValidator where the next Condition gets inverted
-     * @see Validator#validating(Predicate)
+     * @see util.validator.interfaces.Validator#validating(Predicate)
      */
     @Override
-    NumberValidator<T, R> not();
+    IntValidator<T> not();
 
     /**
      * checks if the Value is within normal range of the given values
@@ -35,7 +47,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      * @param max the upper bound
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> inRange(R min, R max);
+    IntValidator<T> inRange(Integer min, Integer max);
 
     /**
      * checks if the Value is within exclusive range of the given values
@@ -47,7 +59,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      * @param max the upper bound
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> inRangeExclusive(R min, R max);
+    IntValidator<T> inRangeExclusive(Integer min, Integer max);
 
     /**
      * checks if the Value is within inclusive range of the given values
@@ -59,7 +71,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      * @param max the upper bound
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> inRangeInclusive(R min, R max);
+    IntValidator<T> inRangeInclusive(Integer min, Integer max);
 
     /**
      * checks if the extracted key is bigger than the value
@@ -70,7 +82,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      * @param value the lower bound
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> greaterThan(R value);
+    IntValidator<T> greaterThan(Integer value);
 
     /**
      * checks if the extracted key is bigger or equal than the value
@@ -81,7 +93,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      * @param value the lower bound
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> greaterOrEqualThan(R value);
+    IntValidator<T> greaterOrEqualThan(Integer value);
 
     /**
      * checks if the extracted key is smaller than the value
@@ -92,7 +104,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      * @param value the upper bound
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> lesserThan(R value);
+    IntValidator<T> lesserThan(Integer value);
 
     /**
      * checks if the extracted key is smaller or equal than the value
@@ -103,7 +115,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      * @param value the upper bound
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> lesserOrEqualThan(R value);
+    IntValidator<T> lesserOrEqualThan(Integer value);
 
     /**
      * checks if the extracted key is positive. 0 is not counted as positive
@@ -113,7 +125,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      *
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> positive();
+    IntValidator<T> positive();
 
     /**
      * checks if the extracted key is negative. 0 is not counted as negative
@@ -123,7 +135,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      *
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> negative();
+    IntValidator<T> negative();
 
     /**
      * checks if the extracted key is equal to the value
@@ -134,7 +146,7 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      * @param value the value to be compared to the extracted key
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> equal(R value);
+    IntValidator<T> equal(Integer value);
 
     /**
      * checks if the extracted key is 0
@@ -143,5 +155,5 @@ public interface NumberValidator<T, R extends Number> extends Validator<T, R> {
      *
      * @return an instance with this condition added
      */
-    NumberValidator<T, R> isZero();
+    IntValidator<T> isZero();
 }
