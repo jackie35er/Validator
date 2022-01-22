@@ -4,15 +4,12 @@ import util.validator.Validator;
 import util.validator.builder.PredicateHolder;
 import util.validator.builder.SimpleValidatorBuilder;
 import util.validator.builder.ValidatorBuilder;
+import util.validator.builder.numbervalidatorbuilder.*;
 import util.validator.builder.numbervalidatorbuilder.LongValidatorBuilder;
-import util.validator.builder.numbervalidatorbuilder.LongValidatorBuilder;
-import util.validator.builder.numbervalidatorbuilder.NumberValidatorBuilder;
 import util.validator.implementations.AbstractValidator;
 
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.ToLongFunction;
+import java.util.function.*;
 
 public class LongValidatorBuilderImpl<T> implements LongValidatorBuilder<T> {
     private final PredicateHolder<T,Long> predicateHolder;
@@ -37,6 +34,21 @@ public class LongValidatorBuilderImpl<T> implements LongValidatorBuilder<T> {
     public <NEW_R> ValidatorBuilder<T, NEW_R> key(Function<T, NEW_R> keyExtractor) {
         predicateHolder.key(keyExtractor);
         return new SimpleValidatorBuilder<>(this,keyExtractor);
+    }
+
+    @Override
+    public DoubleValidatorBuilder<T> doubleKey(ToDoubleFunction<T> keyExtractor) {
+        return new DoubleValidatorBuilderImpl<>(this,keyExtractor);
+    }
+
+    @Override
+    public IntValidatorBuilder<T> intKey(ToIntFunction<T> keyExtractor) {
+        return new IntValidatorBuilderImpl<>(this,keyExtractor);
+    }
+
+    @Override
+    public LongValidatorBuilder<T> longKey(ToLongFunction<T> keyExtractor) {
+        return new LongValidatorBuilderImpl<>(this,keyExtractor);
     }
 
     /**
