@@ -4,14 +4,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public interface Validator<T> {
-
-    /**
-     * returns if the object matches all the conditions
-     * @param toValidate the object to validate
-     * @return if the object is valid
-     */
-    boolean validate(T toValidate);
+public interface Validator<T> extends BasicValidator<T>{
 
     /**
      * returns if all the objects match all the conditions
