@@ -42,7 +42,7 @@ public interface ValidatorBuilder<T,R> {
     /**
      * adds a new Condition for the given object to be valid
      * @param isValid the new Condition
-     * @return the current VaildatorBuilder
+     * @return the current ValidatorBuilder
      */
     ValidatorBuilder<T,R> validating(Predicate<R> isValid);
 
