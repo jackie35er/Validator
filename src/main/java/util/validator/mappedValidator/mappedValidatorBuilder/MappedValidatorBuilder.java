@@ -1,12 +1,9 @@
-package util.validator.builder.mappedValidatorBuilder;
+package util.validator.mappedValidator.mappedValidatorBuilder;
 
 
 import util.validator.Validator;
-import util.validator.builder.ValidatorBuilder;
 
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.*;
 
 public interface MappedValidatorBuilder<T,K,R>{

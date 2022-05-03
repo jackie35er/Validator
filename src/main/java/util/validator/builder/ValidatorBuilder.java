@@ -10,6 +10,9 @@ import java.util.function.*;
 public interface ValidatorBuilder<T,R> {
 
 
+    static <T,R> ValidatorBuilder<T,R> getInstance(Function<T,R> keyExtractor){
+        return new SimpleValidatorBuilder<>(keyExtractor);
+    }
 
     /**
      * Return a new ValidatorBuilder with a new keyExtractor

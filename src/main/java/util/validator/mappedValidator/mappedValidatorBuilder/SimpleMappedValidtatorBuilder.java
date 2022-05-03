@@ -1,6 +1,7 @@
-package util.validator.builder.mappedValidatorBuilder;
+package util.validator.mappedValidator.mappedValidatorBuilder;
 
 import util.validator.Validator;
+import util.validator.mappedValidator.AbstractMappedValidator;
 
 import java.util.*;
 import java.util.function.Function;

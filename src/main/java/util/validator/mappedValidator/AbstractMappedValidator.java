@@ -1,4 +1,4 @@
-package util.validator.builder.mappedValidatorBuilder;
+package util.validator.mappedValidator;
 
 import util.validator.implementations.AbstractValidator;
 
