@@ -8,7 +8,7 @@ Everything written here is better described in the javadoc
 ### validate
 simply returns if the instance is valid or not
 
-```boolean validate(T toValidate);```
+`boolean validate(T toValidate);`
 
 ### allValid
 
@@ -20,7 +20,7 @@ Checks if instances in the collection are valid
 
 Returns an Optional of the object if its valid, otherwise an empty one
 
-Optional<T> validOp(T toValidate);`
+`Optional<T> validOp(T toValidate);`
 
 ### validOr
 
